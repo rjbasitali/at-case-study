@@ -1,14 +1,15 @@
 package products
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
-	"time"
 
+	"git.rjbasitali.com/at-case-study/pkg/cache"
+	"git.rjbasitali.com/at-case-study/pkg/db"
+	"git.rjbasitali.com/at-case-study/pkg/log"
 	"git.rjbasitali.com/at-case-study/pkg/models"
 	"git.rjbasitali.com/at-case-study/pkg/validate"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func GetProducts(c *gin.Context) {
@@ -21,20 +22,34 @@ func GetProducts(c *gin.Context) {
 	}
 
 	id := c.Param("id")
-	pid, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid product id",
-		})
+	p := &models.Product{}
+
+	if err := cache.Get(c, id, p); err == nil {
+		c.JSON(http.StatusOK, p)
 		return
 	}
 
-	product := models.Product{
-		ID:          pid,
-		Name:        fmt.Sprintf("Product %d", pid),
-		Description: fmt.Sprintf("Product %d description", pid),
-		CreatedAt:   time.Now(),
+	result := db.DB.First(p, "id = ?", id)
+	if result.Error != nil {
+		log.Error("error while fetching product", result.Error)
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"error": "product not found",
+			})
+			return
+		default:
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"error": "internal server error",
+			})
+			return
+		}
 	}
 
-	c.JSON(http.StatusOK, &product)
+	err := cache.Set(c, id, p)
+	if err != nil {
+		log.Error("error while caching product", err)
+	}
+
+	c.JSON(http.StatusOK, p)
 }

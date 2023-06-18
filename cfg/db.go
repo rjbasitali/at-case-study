@@ -10,10 +10,8 @@ var (
 	DB_USER string
 	DB_PASS string
 	DB_HOST string
-)
 
-var (
-	DBConnStr = fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", DB_USER, DB_PASS, DB_HOST, DB_NAME)
+	DB_CONN_STR string
 )
 
 func init() {
@@ -32,4 +30,6 @@ func init() {
 	if val, ok := os.LookupEnv("DB_HOST"); ok {
 		DB_HOST = val
 	}
+
+	DB_CONN_STR = fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", DB_USER, DB_PASS, DB_HOST, DB_NAME)
 }

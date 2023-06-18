@@ -8,10 +8,7 @@ import (
 )
 
 func main() {
-	// initialize the database
-	db.Init()
-	// initialize redis client
-	cache.Init()
-	// run the server - blocking call
-	server.Run()
+	db.Init()    // initialize the database
+	cache.Init() // initialize redis client
+	server.Run() // run the server - blocking call
 }

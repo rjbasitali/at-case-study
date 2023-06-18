@@ -12,7 +12,7 @@ import (
 
 var c *redis.Client
 
-func init() {
+func Init() {
 	c = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", cfg.REDIS_HOST, cfg.REDIS_PORT),
 		Password: cfg.REDIS_PASSWORD,

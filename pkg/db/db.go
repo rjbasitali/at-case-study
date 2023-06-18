@@ -10,7 +10,7 @@ import (
 
 var DB *gorm.DB
 
-func init() {
+func Init() {
 	db, err := gorm.Open(postgres.Open(cfg.DBConnStr), &gorm.Config{})
 
 	if err != nil {

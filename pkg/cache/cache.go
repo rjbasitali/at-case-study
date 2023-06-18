@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"git.rjbasitali.com/at-case-study/cfg"
-	"git.rjbasitali.com/at-case-study/pkg/log"
+	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -21,7 +21,7 @@ func Init() {
 
 	_, err := c.Ping(c.Context()).Result()
 	if err != nil {
-		log.Error("error while connecting to redis", err)
+		fmt.Fprintln(gin.DefaultErrorWriter, "error while connecting to redis", err)
 		panic(err)
 	}
 }

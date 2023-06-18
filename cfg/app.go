@@ -1,9 +1,12 @@
 package cfg
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -12,6 +15,13 @@ var (
 	JWT_SIGNING_SERCRET string
 	JWT_EXPIRY_DURATION time.Duration
 
+	DB_NAME string
+	DB_USER string
+	DB_PASS string
+	DB_HOST string
+
+	DB_CONN_STR string
+
 	REDIS_HOST     string
 	REDIS_PORT     string
 	REDIS_PASSWORD string
@@ -19,35 +29,25 @@ var (
 )
 
 func init() {
-	if val, ok := os.LookupEnv("APP_ADDR"); ok {
-		APP_ADDR = val
+	err := godotenv.Load()
+	if err != nil {
+		panic("Error loading .env file")
 	}
 
-	if val, ok := os.LookupEnv("JWT_SIGNING_SERCRET"); ok {
-		JWT_SIGNING_SERCRET = val
-	}
+	APP_ADDR = os.Getenv("APP_ADDR")
 
-	if val, ok := os.LookupEnv("JWT_EXPIRY_DURATION"); ok {
-		if d, err := time.ParseDuration(val); err == nil {
-			JWT_EXPIRY_DURATION = d
-		}
-	}
+	JWT_SIGNING_SERCRET = os.Getenv("JWT_SIGNING_SERCRET")
+	JWT_EXPIRY_DURATION, _ = time.ParseDuration(os.Getenv("JWT_EXPIRY_DURATION"))
 
-	if val, ok := os.LookupEnv("REDIS_HOST"); ok {
-		REDIS_HOST = val
-	}
+	DB_NAME = os.Getenv("DB_NAME")
+	DB_USER = os.Getenv("DB_USER")
+	DB_PASS = os.Getenv("DB_PASS")
+	DB_HOST = os.Getenv("DB_HOST")
 
-	if val, ok := os.LookupEnv("REDIS_PORT"); ok {
-		REDIS_PORT = val
-	}
+	REDIS_HOST = os.Getenv("REDIS_HOST")
+	REDIS_PORT = os.Getenv("REDIS_PORT")
+	REDIS_PASSWORD = os.Getenv("REDIS_PASSWORD")
+	REDIS_DB, _ = strconv.Atoi(os.Getenv("REDIS_DB"))
 
-	if val, ok := os.LookupEnv("REDIS_PASSWORD"); ok {
-		REDIS_PASSWORD = val
-	}
-
-	if val, ok := os.LookupEnv("REDIS_DB"); ok {
-		if i, err := strconv.Atoi(val); err == nil {
-			REDIS_DB = i
-		}
-	}
+	DB_CONN_STR = fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", DB_USER, DB_PASS, DB_HOST, DB_NAME)
 }

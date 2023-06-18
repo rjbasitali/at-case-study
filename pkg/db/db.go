@@ -1,9 +1,11 @@
 package db
 
 import (
+	"fmt"
+
 	"git.rjbasitali.com/at-case-study/cfg"
-	"git.rjbasitali.com/at-case-study/pkg/log"
 	"git.rjbasitali.com/at-case-study/pkg/models"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -14,7 +16,7 @@ func Init() {
 	db, err := gorm.Open(postgres.Open(cfg.DB_CONN_STR), &gorm.Config{})
 
 	if err != nil {
-		log.Error(err)
+		fmt.Fprintln(gin.DefaultErrorWriter, "error connecting to database: ", err)
 		panic("failed to connect database")
 	}
 

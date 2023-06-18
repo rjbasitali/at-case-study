@@ -1,13 +1,15 @@
 package server
 
 import (
+	"fmt"
+
 	"git.rjbasitali.com/at-case-study/cfg"
-	"git.rjbasitali.com/at-case-study/pkg/log"
+	"github.com/gin-gonic/gin"
 )
 
 func Run() {
 	r := newRouter()
 	if err := r.Run(cfg.APP_ADDR); err != nil {
-		log.Error(err)
+		fmt.Fprintln(gin.DefaultErrorWriter, "error running server: ", err)
 	}
 }

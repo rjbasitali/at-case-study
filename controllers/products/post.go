@@ -1,10 +1,10 @@
 package products
 
 import (
+	"fmt"
 	"net/http"
 
 	"git.rjbasitali.com/at-case-study/pkg/db"
-	"git.rjbasitali.com/at-case-study/pkg/log"
 	"git.rjbasitali.com/at-case-study/pkg/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func CreateProduct(c *gin.Context) {
 
 	result := db.DB.Create(p)
 	if result.Error != nil {
-		log.Error("error while inserting new product", result.Error)
+		fmt.Fprintln(gin.DefaultErrorWriter, "error while inserting new product", result.Error)
 		switch result.Error {
 		case gorm.ErrDuplicatedKey:
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

@@ -14,7 +14,7 @@ var c *redis.Client
 
 func init() {
 	c = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", cfg.REDIS_HOST, cfg.REDIS_PORT),
+		Addr:     fmt.Sprintf("%s:%s", cfg.REDIS_HOST, cfg.REDIS_PORT),
 		Password: cfg.REDIS_PASSWORD,
 		DB:       cfg.REDIS_DB,
 	})

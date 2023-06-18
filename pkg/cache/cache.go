@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"git.rjbasitali.com/at-case-study/cfg"
 	"git.rjbasitali.com/at-case-study/pkg/log"
@@ -13,7 +14,7 @@ var c *redis.Client
 
 func init() {
 	c = redis.NewClient(&redis.Options{
-		Addr:     cfg.REDIS_ADDR,
+		Addr:     fmt.Sprintf("%s:%d", cfg.REDIS_HOST, cfg.REDIS_PORT),
 		Password: cfg.REDIS_PASSWORD,
 		DB:       cfg.REDIS_DB,
 	})

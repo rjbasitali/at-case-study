@@ -12,7 +12,8 @@ var (
 	JWT_SIGNING_SERCRET string
 	JWT_EXPIRY_DURATION time.Duration
 
-	REDIS_ADDR     string
+	REDIS_HOST     string
+	REDIS_PORT     string
 	REDIS_PASSWORD string
 	REDIS_DB       int
 )
@@ -32,8 +33,12 @@ func init() {
 		}
 	}
 
-	if val, ok := os.LookupEnv("REDIS_ADDR"); ok {
-		REDIS_ADDR = val
+	if val, ok := os.LookupEnv("REDIS_HOST"); ok {
+		REDIS_HOST = val
+	}
+
+	if val, ok := os.LookupEnv("REDIS_PORT"); ok {
+		REDIS_PORT = val
 	}
 
 	if val, ok := os.LookupEnv("REDIS_PASSWORD"); ok {

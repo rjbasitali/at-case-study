@@ -5,7 +5,7 @@ It also includes a `docker-compose` file to run the project in a containerized e
 
 ## Pre-requisites
 
-The setup instructions assume that you have `debian` based linux distro, `git` and `docker` with the `compose` plugin.
+The setup instructions assume that you have `debian` based linux distro with `git`, `docker` and `docker compose` plugin installed.
 
 ###  Docker Installation
 

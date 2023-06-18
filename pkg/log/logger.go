@@ -19,3 +19,7 @@ func Log(args ...interface{}) {
 func Error(args ...interface{}) {
 	logger.Error(args...)
 }
+
+func Trace(args ...interface{}) {
+	logger.Trace(args...)
+}

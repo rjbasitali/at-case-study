@@ -25,6 +25,7 @@ func GetProducts(c *gin.Context) {
 	p := &models.Product{}
 
 	if err := cache.Get(c, id, p); err == nil {
+		log.Log("product found in cache")
 		c.JSON(http.StatusOK, p)
 		return
 	}
@@ -46,10 +47,12 @@ func GetProducts(c *gin.Context) {
 		}
 	}
 
+	log.Log("cache product")
 	err := cache.Set(c, id, p)
 	if err != nil {
 		log.Error("error while caching product", err)
 	}
 
+	log.Log("product found in db")
 	c.JSON(http.StatusOK, p)
 }

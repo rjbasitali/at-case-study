@@ -5,18 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"git.rjbasitali.com/at-case-study/cfg"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 )
 
 var c *redis.Client
 
-func Init() {
+func Init(host, port, password string, db int) {
 	c = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", cfg.REDIS_HOST, cfg.REDIS_PORT),
-		Password: cfg.REDIS_PASSWORD,
-		DB:       cfg.REDIS_DB,
+		Addr:     fmt.Sprintf("%s:%s", host, port),
+		Password: password,
+		DB:       db,
 	})
 
 	_, err := c.Ping(c.Context()).Result()

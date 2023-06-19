@@ -28,7 +28,7 @@ var (
 	REDIS_DB       int
 )
 
-func init() {
+func Init() {
 	err := godotenv.Load()
 	if err != nil {
 		panic("Error loading .env file")

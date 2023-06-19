@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetProducts(c *gin.Context) {
+func GetProduct(c *gin.Context) {
 	locale := c.Query("locale")
 	if !validate.Locale(locale) {
 		c.JSON(http.StatusBadRequest, gin.H{

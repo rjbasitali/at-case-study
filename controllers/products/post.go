@@ -19,6 +19,13 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
+	if p.ID == "" || p.Name == "" || p.Description == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "missing required fields",
+		})
+		return
+	}
+
 	result := db.DB.Create(p)
 	if result.Error != nil {
 		fmt.Fprintln(gin.DefaultErrorWriter, "error while inserting new product", result.Error)

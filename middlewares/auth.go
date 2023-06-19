@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.rjbasitali.com/at-case-study/cfg"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.Request.Header.Get("Authorization")
 
@@ -20,7 +19,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			}
 
 			// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
-			return []byte(cfg.JWT_SIGNING_SERCRET), nil
+			return []byte(jwtSecret), nil
 		})
 
 		if err != nil {

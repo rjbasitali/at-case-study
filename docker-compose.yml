@@ -17,10 +17,10 @@ services:
       - db
     restart: on-failure
 
-  pg-bouncer:
+  pgbouncer:
     restart: always
     image: bitnami/pgbouncer:1.20.0
-    container_name: pg-bouncer
+    container_name: pgbouncer
     env_file: .env
     environment:
       POSTGRESQL_USERNAME: ${DB_USER}
@@ -30,8 +30,14 @@ services:
       POSTGRESQL_PORT: 5432
       PGBOUNCER_PORT: 6432
       PGBOUNCER_BIND_ADDRESS: 0.0.0.0
+      PGBOUNCER_CLIENT_TLS_SSLMODE: disable
+      # PGBOUNCER_CLIENT_TLS_CERT_FILE: /opt/bitnami/pgbouncer/certs/pgbouncer.crt
+      # PGBOUNCER_CLIENT_TLS_KEY_FILE: /opt/bitnami/pgbouncer/certs/pgbouncer.key
     networks:
       - internal_network
+    volumes:
+    #   - /path/to/certs:/opt/bitnami/pgbouncer/certs
+    - /etc/pgbouncer-persistence/conf/:/bitnami/pgbouncer/conf/
 
   db:
     restart: always

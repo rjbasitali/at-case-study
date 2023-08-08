@@ -20,6 +20,8 @@ var (
 	DB_PASS string
 	DB_HOST string
 
+	PGBOUNCER_HOST string
+
 	DB_CONN_STR string
 
 	REDIS_HOST     string
@@ -47,10 +49,12 @@ func Init() {
 	DB_PASS = os.Getenv("DB_PASS")
 	DB_HOST = os.Getenv("DB_HOST")
 
+	PGBOUNCER_HOST = os.Getenv("PGBOUNCER_HOST")
+
 	REDIS_HOST = os.Getenv("REDIS_HOST")
 	REDIS_PORT = os.Getenv("REDIS_PORT")
 	REDIS_PASSWORD = os.Getenv("REDIS_PASSWORD")
 	REDIS_DB, _ = strconv.Atoi(os.Getenv("REDIS_DB"))
 
-	DB_CONN_STR = fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", DB_USER, DB_PASS, DB_HOST, DB_NAME)
+	DB_CONN_STR = fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", DB_USER, DB_PASS, PGBOUNCER_HOST, DB_NAME)
 }

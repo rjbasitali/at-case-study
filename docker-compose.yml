@@ -19,25 +19,25 @@ services:
 
   pgbouncer:
     restart: always
-    image: bitnami/pgbouncer:1.20.0
+    image: edoburu/pgbouncer:1.19.1-p1
     container_name: pgbouncer
     env_file: .env
     environment:
-      POSTGRESQL_USERNAME: ${DB_USER}
-      POSTGRESQL_PASSWORD: ${DB_PASS}
-      POSTGRESQL_DATABASE: ${DB_NAME}
-      POSTGRESQL_HOST: db
-      POSTGRESQL_PORT: 5432
-      PGBOUNCER_PORT: 6432
-      PGBOUNCER_BIND_ADDRESS: 0.0.0.0
-      PGBOUNCER_CLIENT_TLS_SSLMODE: disable
-      # PGBOUNCER_CLIENT_TLS_CERT_FILE: /opt/bitnami/pgbouncer/certs/pgbouncer.crt
-      # PGBOUNCER_CLIENT_TLS_KEY_FILE: /opt/bitnami/pgbouncer/certs/pgbouncer.key
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      POOL_MODE: transaction
+      ADMIN_USERS: ${DB_USER}
+      AUTH_TYPE: scram-sha-256
+      MAX_CLIENT_CONN: 200
+      DEFAULT_POOL_SIZE: 25
+    ports:
+      - "5432:5432"
     networks:
       - internal_network
-    volumes:
-    #   - /path/to/certs:/opt/bitnami/pgbouncer/certs
-    - /etc/pgbouncer-persistence/conf/:/bitnami/pgbouncer/conf/
+    depends_on:
+      - db
 
   db:
     restart: always

@@ -39,8 +39,8 @@ func Init(connStr string) {
 	}
 	fmt.Fprintln(gin.DefaultWriter, "Connected to database")
 
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(25)
+	sqlDB.SetMaxIdleConns(20)
+	sqlDB.SetMaxOpenConns(200)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	DB = db

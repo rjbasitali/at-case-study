@@ -17,6 +17,22 @@ services:
       - db
     restart: on-failure
 
+  pg-bouncer:
+    restart: always
+    image: bitnami/pgbouncer:1.20.0
+    container_name: pg-bouncer
+    env_file: .env
+    environment:
+      POSTGRESQL_USERNAME: ${DB_USER}
+      POSTGRESQL_PASSWORD: ${DB_PASS}
+      POSTGRESQL_DATABASE: ${DB_NAME}
+      POSTGRESQL_HOST: db
+      POSTGRESQL_PORT: 5432
+      PGBOUNCER_PORT: 6432
+      PGBOUNCER_BIND_ADDRESS: 0.0.0.0
+    networks:
+      - internal_network
+
   db:
     restart: always
     image: postgres:14-alpine

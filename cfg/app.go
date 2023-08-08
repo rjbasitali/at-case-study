@@ -28,6 +28,9 @@ var (
 	REDIS_DB       int
 )
 
+// Init initializes the application configuration.
+// It reads the configuration from the env file.
+// It should be called before any other function.
 func Init() {
 	err := godotenv.Load()
 	if err != nil {

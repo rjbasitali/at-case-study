@@ -10,6 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetToken generates a new token.
+// It returns the token in the response body and a status code `http.StatusCreated`.
+// An error is returned if the token could not be generated.
 func GetToken(c *gin.Context) {
 	tokenString, err := auth.NewToken(cfg.JWT_SIGNING_SERCRET, cfg.JWT_EXPIRY_DURATION)
 	if err != nil {

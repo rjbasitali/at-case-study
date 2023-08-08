@@ -10,6 +10,13 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
+// CreateProduct creates a new product.
+// It accepts a JSON body with the following fields:
+// - id
+// - name
+// - description
+// It returns a status code `http.StatusCreated` if the product is created successfully.
+// An error is returned if the product could not be created.
 func CreateProduct(c *gin.Context) {
 	p := &models.Product{}
 	if err := c.ShouldBindJSON(p); err != nil {

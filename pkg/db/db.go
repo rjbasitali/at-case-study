@@ -11,6 +11,9 @@ import (
 
 var DB *gorm.DB
 
+// Init initializes the database connection.
+// It accepts the connection string as a parameter.
+// It panics if the connection to the database could not be established.
 func Init(connStr string) {
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 

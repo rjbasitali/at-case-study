@@ -8,6 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// newRouter creates a new router.
+// It registers the following routes and middleware:
+// - GET /auth/token
+// - AuthMiddleware
+// - GET /products/:id
+// - POST /products
 func newRouter() *gin.Engine {
 	r := gin.Default()
 

@@ -8,6 +8,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// AuthMiddleware is a middleware that checks if the request is authenticated.
+// It accepts a JWT secret as a parameter.
+// It returns a status code `http.StatusForbidden` if the request is not authenticated.
+// The request is authenticated if it contains a valid JWT token in the `Authorization` header.
+// The JWT secret is used to validate the token.
 func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.Request.Header.Get("Authorization")

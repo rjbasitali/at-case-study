@@ -12,6 +12,11 @@ import (
 	"gorm.io/gorm"
 )
 
+// GetProduct returns a product by id.
+// It accepts a query parameter `locale` with value `en_ae` or `ar_ae` to return the product in the specified locale.
+// It accepts a path parameter `id` to fetch the product.
+// It returns the product in the response body and a status code `http.StatusOK`.
+// An error is returned if the product could not be fetched or `locale` in invalid.
 func GetProduct(c *gin.Context) {
 	locale := c.Query("locale")
 	if !validate.Locale(locale) {

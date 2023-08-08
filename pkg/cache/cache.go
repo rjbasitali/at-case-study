@@ -4,27 +4,42 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 )
 
-var c *redis.Client
+type cache struct {
+	Client *redis.Client
+	sync.Mutex
+}
+
+var c = &cache{}
 
 // Init initializes the redis client.
 // It accepts the host, port, password and db as parameters.
 // It panics if the connection to redis could not be established.
 func Init(host, port, password string, db int) {
-	c = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", host, port),
-		Password: password,
-		DB:       db,
-	})
+	if c.Client != nil {
+		return
+	}
 
-	_, err := c.Ping(c.Context()).Result()
-	if err != nil {
-		fmt.Fprintln(gin.DefaultErrorWriter, "error while connecting to redis", err)
-		panic(err)
+	c.Lock()
+	defer c.Unlock()
+
+	if c.Client == nil {
+		c.Client = redis.NewClient(&redis.Options{
+			Addr:     fmt.Sprintf("%s:%s", host, port),
+			Password: password,
+			DB:       db,
+		})
+
+		_, err := c.Client.Ping(c.Client.Context()).Result()
+		if err != nil {
+			fmt.Fprintln(gin.DefaultErrorWriter, "error while connecting to redis", err)
+			panic(err)
+		}
 	}
 }
 
@@ -36,14 +51,14 @@ func Set(ctx context.Context, key string, value interface{}) error {
 	if err != nil {
 		return err
 	}
-	return c.Set(ctx, key, p, 0).Err()
+	return c.Client.Set(ctx, key, p, 0).Err()
 }
 
 // Get gets a value from redis.
 // It accepts a context and key as parameters.
 // It returns an error if the value could not be fetched.
 func Get(ctx context.Context, key string, dest interface{}) error {
-	val, err := c.Get(ctx, key).Result()
+	val, err := c.Client.Get(ctx, key).Result()
 	if err != nil {
 		return err
 	}

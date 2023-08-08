@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"git.rjbasitali.com/at-case-study/pkg/models"
@@ -11,12 +12,24 @@ import (
 )
 
 var DB *gorm.DB
+var lock sync.Mutex
 
 // Init initializes the database connection.
 // It accepts the connection string as a parameter.
 // It panics if the connection to the database could not be established.
 // It also sets the maximum idle connections, maximum open connections and connection max lifetime.
 func Init(connStr string) {
+	if DB != nil {
+		return
+	}
+
+	lock.Lock()
+	defer lock.Unlock()
+
+	if DB != nil {
+		return
+	}
+
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 
 	if err != nil {
